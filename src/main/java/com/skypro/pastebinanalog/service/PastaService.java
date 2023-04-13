@@ -8,7 +8,6 @@ import com.skypro.pastebinanalog.enums.Status;
 import com.skypro.pastebinanalog.exception.PastaNotFoundException;
 import com.skypro.pastebinanalog.model.Pasta;
 import com.skypro.pastebinanalog.repository.PastaRepository;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,6 @@ public class PastaService {
     }
 
     public List<PastaDTO> getPublicPastaList() {
-        PageRequest pageRequest = PageRequest.of(0, 10);
         return pastaRepository.findTenLastPasta()
                 .stream()
                 .map(PastaDTO::from)
@@ -61,7 +59,7 @@ public class PastaService {
     }
 
     public List<PastaDTO> search(String title, String body) {
-        return pastaRepository.findAll(Specification.where(
+        return pastaRepository.findAllBy(Specification.where(
                                         byTitle(title))
                                         .and(byBody(body)))
                 .stream()

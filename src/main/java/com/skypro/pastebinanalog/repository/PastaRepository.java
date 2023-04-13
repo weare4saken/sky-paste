@@ -24,5 +24,5 @@ public interface PastaRepository extends JpaRepository<Pasta, Long> {
             nativeQuery = true)
     List<Pasta> findTenLastPasta();
 
-    List<Pasta> findAll(Specification<Pasta> spec);
+    List<Pasta> findAllBy(Specification<Pasta> spec);
 }

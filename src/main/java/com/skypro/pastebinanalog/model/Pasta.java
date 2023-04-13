@@ -13,12 +13,11 @@ import java.time.Instant;
 @Setter
 public class Pasta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String title;
     private String body;
+    @Id
     private String hash;
+    private Instant publishedDate;
     private Instant expiredDate;
     @Enumerated(EnumType.STRING)
     private Status status;

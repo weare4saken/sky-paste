@@ -2,7 +2,6 @@ package com.skypro.pastebinanalog.enums;
 
 import lombok.Getter;
 
-import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Getter
@@ -12,8 +11,8 @@ public enum ExpirationTime {
     HOUR(1L, ChronoUnit.HOURS),
     THREE_HOURS(3L, ChronoUnit.HOURS),
     DAY(1L, ChronoUnit.DAYS),
-    WEEK(1L, ChronoUnit.WEEKS),
-    MONTH(1L, ChronoUnit.MONTHS),
+    WEEK(7L, ChronoUnit.DAYS),
+    MONTH(30L, ChronoUnit.DAYS),
     UNLIMITED(Long.MAX_VALUE, ChronoUnit.FOREVER);
 
     private final Long time;

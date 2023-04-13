@@ -9,6 +9,8 @@ import com.skypro.pastebinanalog.service.PastaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/my-awesome-pastebin.tld")
 public class PastaController {
@@ -19,10 +21,10 @@ public class PastaController {
         this.pastaService = pasteFieldService;
     }
 
-    /*@GetMapping
+    @GetMapping
     public List<PastaDTO> getPublicList() {
         return pastaService.getPublicPastaList();
-    }*/
+    }
 
     @GetMapping("/{hash}")
     public ResponseEntity<PastaDTO> getByHash(@PathVariable String hash) {

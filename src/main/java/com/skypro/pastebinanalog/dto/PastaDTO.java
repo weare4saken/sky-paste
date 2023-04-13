@@ -10,11 +10,13 @@ public class PastaDTO {
 
     private String title;
     private String body;
+    private Instant publishedDate;
 
     public static PastaDTO from(Pasta pasta) {
         PastaDTO dto = new PastaDTO();
         dto.setTitle(pasta.getTitle());
         dto.setBody(pasta.getBody());
+        dto.setPublishedDate(pasta.getPublishedDate());
         return dto;
     }
 

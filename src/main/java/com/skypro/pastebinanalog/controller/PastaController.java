@@ -35,9 +35,13 @@ public class PastaController {
     public PastaUrlDTO addPasta(@RequestParam(name = "status") Status status,
                                 @RequestParam(name = "when to delete") ExpirationTime expirationTime,
                                 @RequestBody PastaCreateDTO pastaCreateDTO) {
-        pastaCreateDTO.setStatus(status);
-        pastaCreateDTO.setExpirationTime(expirationTime);
-        return pastaService.createPasta(pastaCreateDTO);
+        return pastaService.createPasta(pastaCreateDTO, status, expirationTime);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PastaDTO>> searchBy(@RequestParam(required = false) String title,
+                                                    @RequestParam(required = false) String body){
+        return ResponseEntity.ok(pastaService.search(title, body));
     }
 
 }

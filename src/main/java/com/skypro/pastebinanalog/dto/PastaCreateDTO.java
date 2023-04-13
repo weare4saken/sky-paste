@@ -11,16 +11,11 @@ public class PastaCreateDTO {
 
     private String title;
     private String body;
-    @JsonIgnore
-    private ExpirationTime expirationTime;
-    @JsonIgnore
-    private Status status;
 
     public Pasta to() {
         Pasta pasta = new Pasta();
         pasta.setTitle(this.getTitle());
         pasta.setBody(this.getBody());
-        pasta.setStatus(this.getStatus());
         return pasta;
     }
 

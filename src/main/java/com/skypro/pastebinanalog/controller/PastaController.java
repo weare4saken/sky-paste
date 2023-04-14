@@ -32,8 +32,8 @@ public class PastaController {
     }
 
     @PostMapping
-    public PastaUrlDTO addPasta(@RequestParam(name = "status") Status status,
-                                @RequestParam(name = "when to delete") ExpirationTime expirationTime,
+    public PastaUrlDTO addPasta(@RequestParam Status status,
+                                @RequestParam ExpirationTime expirationTime,
                                 @RequestBody PastaCreateDTO pastaCreateDTO) {
         return pastaService.createPasta(pastaCreateDTO, status, expirationTime);
     }

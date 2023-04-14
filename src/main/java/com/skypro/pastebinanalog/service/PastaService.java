@@ -33,6 +33,7 @@ public class PastaService {
         Pasta pasta = pastaCreateDTO.to();
         pasta.setStatus(status);
         pasta.setPublishedDate(Instant.now());
+        pasta.setHash(UUID.randomUUID().toString().substring(0,7));
 
         if (expirationTime == ExpirationTime.UNLIMITED) {
             pasta.setExpiredDate(null);
@@ -41,7 +42,6 @@ public class PastaService {
                                                     expirationTime.getUnit()));
         }
 
-        pasta.setHash(UUID.randomUUID().toString().substring(0, 7));
         pastaRepository.save(pasta);
         return PastaUrlDTO.from(pasta);
     }
@@ -59,7 +59,7 @@ public class PastaService {
     }
 
     public List<PastaDTO> search(String title, String body) {
-        return pastaRepository.findAllBy(Specification.where(
+        return pastaRepository.findAll(Specification.where(
                                         byTitle(title))
                                         .and(byBody(body)))
                 .stream()

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table
+@Table(name = "pasta")
 @Getter
 @Setter
 public class Pasta {

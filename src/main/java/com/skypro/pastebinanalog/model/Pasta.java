@@ -8,15 +8,15 @@ import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "pasta")
+@Table
 @Getter
 @Setter
 public class Pasta {
 
-    private String title;
-    private String body;
     @Id
     private String hash;
+    private String title;
+    private String body;
     private Instant publishedDate;
     private Instant expiredDate;
     @Enumerated(EnumType.STRING)

@@ -1,29 +1,28 @@
 package com.skypro.pastebinanalog.repository;
 
+import com.skypro.pastebinanalog.enums.Status;
 import com.skypro.pastebinanalog.model.Pasta;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PastaRepository extends JpaRepository<Pasta, Long>, JpaSpecificationExecutor<Pasta> {
+public interface PastaRepository extends JpaRepository<Pasta, Long> {
 
-    Optional<Pasta> findPastaByHash(String hash);
-
+    @Modifying
+    @Query(value="DELETE FROM Pasta p WHERE p.expiredDate < now()")
     void deleteAllByExpiredDateIsBefore(Instant now);
 
-    @Query(value = "SELECT * FROM pasta AS p WHERE p.status = 'PUBLIC' ORDER BY p.published_date DESC LIMIT 10",
-            nativeQuery = true)
-    List<Pasta> findTenLastPasta();
+    Optional<Pasta> findPastaByHashAndExpiredDateIsAfter(String hash, Instant date);
 
-    List<Pasta> findAll(Specification<Pasta> spec);
+    List<Pasta> findTop10ByStatusAndExpiredDateAfterOrderByPublishedDateDesc(Status status, Instant date);
+
+    List<Pasta> findAllByTitleContainsOrBodyContains(String title, String body);
+
+
 }

@@ -18,7 +18,7 @@ public class ClearPastaJob {
         this.pastaRepository = pastaRepository;
     }
 
-    @Scheduled(fixedRate = 60_000)
+    @Scheduled(cron = "0 0 2 * * *")
     @Transactional
     public void clearTokens() {
         log.info("Clear old pasta's");

@@ -10,7 +10,7 @@ public class NotFoundControllerAdvice {
 
     @ExceptionHandler(PastaNotFoundException.class)
     public ResponseEntity<?> notFound() {
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body("Pasta not found");
     }
 
 }

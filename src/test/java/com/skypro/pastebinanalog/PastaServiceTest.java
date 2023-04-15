@@ -10,19 +10,14 @@ import com.skypro.pastebinanalog.exception.PastaNotFoundException;
 import com.skypro.pastebinanalog.model.Pasta;
 import com.skypro.pastebinanalog.repository.PastaRepository;
 import com.skypro.pastebinanalog.service.PastaService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.jpa.domain.Specification;
 
-import javax.annotation.processing.Generated;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,21 +34,24 @@ public class PastaServiceTest {
     @InjectMocks
     private PastaService pastaService;
 
-    private final Pasta pasta = new Pasta();
-
-
-   /* @Test
-    public void testCreatePasta() {
-        PastaCreateDTO createDTO = new PastaCreateDTO();
-        when(repositoryMock.save(any(Pasta.class))).thenReturn(pasta);
-
-        pastaService.createPasta(createDTO);
-
-        verify(repositoryMock, only()).save(any(Pasta.class));
-    }*/
 
     @Test
-    public void testGetPastaByHashShouldReturnCorrectPasta2() {
+    public void testCreatePastaShouldReturnNotNullUrl() {
+        Pasta pasta = new Pasta();
+
+        PastaCreateDTO createDTO = new PastaCreateDTO();
+        createDTO.setExpirationTime(ExpirationTime.UNLIMITED);
+
+        when(repositoryMock.save(any(Pasta.class))).thenReturn(pasta);
+
+        PastaUrlDTO url = pastaService.createPasta(createDTO);
+
+        assertNotNull(url);
+    }
+
+    @Test
+    public void testGetPastaByHashShouldReturnCorrectPasta() {
+        Pasta pasta = new Pasta();
         String hash = RandomHashGenerator.generateHash();
         String title = "Title";
         String body = "Body";
@@ -82,7 +80,7 @@ public class PastaServiceTest {
     }
 
 
-    /*@Test
+    @Test
     public void testGetPublicListShouldReturnCorrectList() {
         List<Pasta> pastaList = new ArrayList<>();
 
@@ -96,38 +94,48 @@ public class PastaServiceTest {
             pastaList.add(pasta);
         }
 
-        when(repositoryMock.findTenLastPasta()).thenReturn(pastaList.subList(0, 5));
+        when(repositoryMock.findTop10ByStatusAndExpiredDateAfterOrderByPublishedDateDesc(eq(Status.PUBLIC), any(Instant.class)))
+                .thenReturn(pastaList.subList(0, 5));
 
         List<PastaDTO> pastaDTOList = pastaService.getPublicPastaList();
 
         assertEquals(5, pastaDTOList.size());
-    }*/
+    }
 
-   /* @Test
-    public void testSearch() {
+    @Test
+    public void testSearchShouldReturnCorrectList() {
         String title = "Title";
-        String body = null;
+        String body = "";
 
         Pasta pasta1 = new Pasta();
         pasta1.setTitle("Title1");
         pasta1.setBody("Body1");
+        pasta1.setStatus(Status.PUBLIC);
+        pasta1.setHash(RandomHashGenerator.generateHash());
+        pasta1.setPublishedDate(Instant.now());
+        pasta1.setExpiredDate(Instant.MAX);
+
         Pasta pasta2 = new Pasta();
         pasta2.setTitle("Title2");
         pasta2.setBody("Body2");
+        pasta2.setStatus(Status.PUBLIC);
+        pasta2.setHash(RandomHashGenerator.generateHash());
+        pasta2.setPublishedDate(Instant.now());
+        pasta2.setExpiredDate(Instant.MAX);
 
         List<Pasta> pastaList = new ArrayList<>();
         pastaList.add(pasta1);
         pastaList.add(pasta2);
 
-        when(repositoryMock.findAll(any(Specification.class))).thenReturn(pastaList);
+        when(repositoryMock.findAllByTitleContainsOrBodyContains(title, body)).thenReturn(pastaList);
 
-        List<PastaDTO> pastaDTOList = pastaService.search(title, body);
+        List<PastaDTO> pastaDTOList = pastaService.searchBy(title, body);
 
         assertEquals(pastaList.size(), pastaDTOList.size());
         assertEquals(pasta1.getTitle(), pastaDTOList.get(0).getTitle());
         assertEquals(pasta1.getBody(), pastaDTOList.get(0).getBody());
         assertEquals(pasta2.getTitle(), pastaDTOList.get(1).getTitle());
         assertEquals(pasta2.getBody(), pastaDTOList.get(1).getBody());
-    }*/
+    }
 
 }

@@ -127,7 +127,7 @@ public class PastaServiceTest {
         pastaList.add(pasta1);
         pastaList.add(pasta2);
 
-        when(repositoryMock.findAllByTitleContainsOrBodyContains(title, body)).thenReturn(pastaList);
+        when(repositoryMock.findAllByTitleContainsOrBodyContains(Status.PUBLIC, title, body)).thenReturn(pastaList);
 
         List<PastaDTO> pastaDTOList = pastaService.searchBy(title, body);
 

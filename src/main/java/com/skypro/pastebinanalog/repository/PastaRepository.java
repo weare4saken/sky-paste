@@ -22,7 +22,7 @@ public interface PastaRepository extends JpaRepository<Pasta, Long> {
 
     List<Pasta> findTop10ByStatusAndExpiredDateAfterOrderByPublishedDateDesc(Status status, Instant date);
 
-    List<Pasta> findAllByTitleContainsOrBodyContains(String title, String body);
-
+    @Query("SELECT p FROM Pasta p WHERE p.status = ?1 AND p.expiredDate > now() AND p.title = ?2 OR p.body LIKE ?3")
+    List<Pasta> findAllByTitleContainsOrBodyContains(Status status, String title, String body);
 
 }

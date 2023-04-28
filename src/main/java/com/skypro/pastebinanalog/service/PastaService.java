@@ -4,7 +4,6 @@ import com.skypro.pastebinanalog.cryptograph.RandomHashGenerator;
 import com.skypro.pastebinanalog.dto.PastaCreateDTO;
 import com.skypro.pastebinanalog.dto.PastaDTO;
 import com.skypro.pastebinanalog.dto.PastaUrlDTO;
-import com.skypro.pastebinanalog.enums.ExpirationTime;
 import com.skypro.pastebinanalog.enums.Status;
 import com.skypro.pastebinanalog.exception.PastaNotFoundException;
 import com.skypro.pastebinanalog.model.Pasta;
@@ -30,15 +29,9 @@ public class PastaService {
         Pasta pasta = pastaCreateDTO.to();
 
         pasta.setPublishedDate(Instant.now());
-
-        if(!pastaCreateDTO.getExpirationTime().equals(ExpirationTime.UNLIMITED)) {
-            pasta.setExpiredDate(pasta.getPublishedDate()
-                                                        .plus(pastaCreateDTO.getExpirationTime().getTime(),
-                                                              pastaCreateDTO.getExpirationTime().getUnit()));
-        } else {
-            pasta.setExpiredDate(null);
-        }
-
+        pasta.setExpiredDate(pasta.getPublishedDate()
+                                                    .plus(pastaCreateDTO.getExpirationTime().getTime(),
+                                                          pastaCreateDTO.getExpirationTime().getUnit()));
         pasta.setHash(RandomHashGenerator.generateHash());
 
         pastaRepository.save(pasta);
@@ -60,10 +53,8 @@ public class PastaService {
     }
 
     public List<PastaDTO> searchBy(String title, String body) {
-        return pastaRepository.findAllByTitleContainsOrBodyContains(title, body)
+        return pastaRepository.findAllByTitleContainsOrBodyContains(Status.PUBLIC, title, body)
                 .stream()
-                .filter(pasta -> pasta.getStatus().equals(Status.PUBLIC))
-                .filter(paste -> paste.getExpiredDate().isAfter(Instant.now()))
                 .map(PastaDTO::from)
                 .collect(Collectors.toList());
     }
